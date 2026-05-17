@@ -1,0 +1,31 @@
+{
+  "genre": {
+    "primary": "奇幻",
+    "secondary": ["悬疑"]
+  },
+  "tone": {
+    "primary": "严肃沉重",
+    "modifiers": ["悬疑", "治愈"]
+  },
+  "pacing": "中等",
+  "interaction_weights": {
+    "解谜": 35,
+    "战斗": 15,
+    "社交": 25,
+    "探索": 15,
+    "抉择": 10
+  },
+  "narrative_perspective": "第二人称",
+  "perspective_mode": "single",
+  "protagonist_oc": "林星河",
+  "multi_perspective_config": null,
+  "oc_participation": {
+    "林星河": {"scene_role": "main_cast", "appearance_pct": 100, "playable": true, "pov_weight": 100},
+    "艾琳": {"scene_role": "key_supporting", "appearance_pct": 40, "playable": false, "pov_weight": 0},
+    "卡修斯": {"scene_role": "key_supporting", "appearance_pct": 30, "playable": false, "pov_weight": 0}
+  },
+  "game_formats": ["console", "winforms", "html"],
+  "death_possible": false,
+  "romance_enabled": false,
+  "special_mechanics": ["flag追踪系统：通过effects累积的选择标记会影响后序节点的可选路径"]
+}

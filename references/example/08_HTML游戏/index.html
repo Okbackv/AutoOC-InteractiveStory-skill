@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>星落之夜的抉择</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Microsoft YaHei', 'Noto Sans SC', 'PingFang SC', sans-serif;
+  background: #1a1a2e;
+  color: #e0e0e0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.8;
+}
+
+#app {
+  max-width: 800px;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+/* Header */
+#header {
+  border-bottom: 1px solid #333;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+#story-title {
+  color: #4fc3f7;
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+#scene-name {
+  color: #ce93d8;
+  font-size: 0.9em;
+}
+
+#pov-indicator {
+  color: #81c784;
+  font-size: 0.85em;
+  background: rgba(129, 199, 132, 0.1);
+  padding: 2px 10px;
+  border-radius: 12px;
+}
+
+/* Main text area */
+#text-area {
+  flex: 1;
+  margin-bottom: 24px;
+}
+
+#text-content {
+  font-size: 1.05em;
+  opacity: 0;
+  animation: fadeIn 0.6s ease forwards;
+}
+
+#text-content p {
+  margin-bottom: 1em;
+  text-indent: 2em;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Choices */
+#choices-container {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.choice-btn {
+  background: #16213e;
+  color: #e0e0e0;
+  border: 1px solid #0f3460;
+  padding: 14px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1em;
+  font-family: inherit;
+  text-align: left;
+  transition: all 0.2s ease;
+  animation: slideUp 0.4s ease forwards;
+  opacity: 0;
+}
+
+.choice-btn:nth-child(1) { animation-delay: 0.1s; }
+.choice-btn:nth-child(2) { animation-delay: 0.2s; }
+.choice-btn:nth-child(3) { animation-delay: 0.3s; }
+.choice-btn:nth-child(4) { animation-delay: 0.4s; }
+
+.choice-btn:hover {
+  background: #0f3460;
+  border-color: #4fc3f7;
+  transform: translateX(4px);
+}
+
+.choice-btn:active {
+  background: #1a4a7a;
+}
+
+.choice-btn .choice-num {
+  color: #4fc3f7;
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Ending screen */
+#ending-screen {
+  display: none;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+#ending-screen .ending-title {
+  font-size: 1.6em;
+  margin-bottom: 12px;
+}
+
+#ending-screen .ending-type-label {
+  display: inline-block;
+  padding: 4px 16px;
+  border-radius: 16px;
+  font-size: 0.9em;
+  margin-bottom: 24px;
+}
+
+.ending-good .ending-title { color: #66bb6a; }
+.ending-good .ending-type-label { background: rgba(102,187,106,0.2); color: #66bb6a; }
+.ending-bad .ending-title { color: #ef5350; }
+.ending-bad .ending-type-label { background: rgba(239,83,80,0.2); color: #ef5350; }
+.ending-true .ending-title { color: #4fc3f7; }
+.ending-true .ending-type-label { background: rgba(79,195,247,0.2); color: #4fc3f7; }
+.ending-neutral .ending-title { color: #bdbdbd; }
+.ending-neutral .ending-type-label { background: rgba(189,189,189,0.2); color: #bdbdbd; }
+.ending-secret .ending-title { color: #ffd54f; }
+.ending-secret .ending-type-label { background: rgba(255,213,79,0.2); color: #ffd54f; }
+
+#ending-screen .stats {
+  color: #888;
+  margin-bottom: 24px;
+  font-size: 0.9em;
+}
+
+#ending-screen button {
+  background: #16213e;
+  color: #e0e0e0;
+  border: 1px solid #0f3460;
+  padding: 10px 28px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1em;
+  font-family: inherit;
+  margin: 6px;
+  transition: all 0.2s;
+}
+
+#ending-screen button:hover { background: #0f3460; }
+
+/* Title screen */
+#title-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 60vh;
+}
+
+#title-screen h1 {
+  color: #4fc3f7;
+  font-size: 2em;
+  margin-bottom: 8px;
+}
+
+#title-screen .subtitle {
+  color: #888;
+  font-size: 1em;
+  margin-bottom: 8px;
+}
+
+#title-screen .meta {
+  color: #666;
+  font-size: 0.85em;
+  margin-bottom: 32px;
+}
+
+#title-screen button {
+  background: #16213e;
+  color: #e0e0e0;
+  border: 1px solid #0f3460;
+  padding: 12px 36px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.1em;
+  font-family: inherit;
+  margin: 6px;
+  transition: all 0.2s;
+  min-width: 180px;
+}
+
+#title-screen button:hover { background: #0f3460; border-color: #4fc3f7; }
+
+/* Toolbar */
+#toolbar {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 16px 0;
+  border-top: 1px solid #333;
+  margin-top: 8px;
+}
+
+#toolbar button {
+  background: transparent;
+  color: #888;
+  border: 1px solid #444;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85em;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+#toolbar button:hover { color: #e0e0e0; border-color: #888; }
+
+/* Save/Load modal */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 100;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-overlay.active { display: flex; }
+
+.modal {
+  background: #1a1a2e;
+  border: 1px solid #333;
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 420px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.modal h3 { color: #4fc3f7; margin-bottom: 16px; }
+
+.modal input {
+  width: 100%;
+  padding: 10px;
+  background: #16213e;
+  border: 1px solid #0f3460;
+  color: #e0e0e0;
+  border-radius: 6px;
+  font-size: 1em;
+  font-family: inherit;
+  margin-bottom: 12px;
+}
+
+.modal .save-list { list-style: none; }
+
+.modal .save-list li {
+  padding: 10px;
+  border-bottom: 1px solid #333;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.2s;
+}
+
+.modal .save-list li:hover { background: #16213e; }
+
+.modal .save-list .delete-btn {
+  background: transparent;
+  color: #ef5350;
+  border: none;
+  cursor: pointer;
+  font-size: 0.85em;
+}
+
+.modal button {
+  background: #16213e;
+  color: #e0e0e0;
+  border: 1px solid #0f3460;
+  padding: 8px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.9em;
+  margin: 4px;
+  transition: all 0.2s;
+}
+
+.modal button:hover { background: #0f3460; }
+.modal button.primary { background: #0f3460; border-color: #4fc3f7; }
+
+/* Mobile */
+@media (max-width: 600px) {
+  #app { padding: 12px; }
+  #title-screen h1 { font-size: 1.5em; }
+  .choice-btn { padding: 12px 14px; }
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="header" style="display:none;">
+    <div>
+      <span id="story-title"></span>
+      <span id="scene-name"></span>
+    </div>
+    <span id="pov-indicator"></span>
+  </div>
+
+  <div id="title-screen"></div>
+  <div id="text-area" style="display:none;">
+    <div id="text-content"></div>
+  </div>
+  <div id="choices-container"></div>
+  <div id="ending-screen"></div>
+
+  <div id="toolbar" style="display:none;">
+    <button onclick="saveGame()" title="存档 (S)">存档</button>
+    <button onclick="showLoadModal()" title="读档 (L)">读档</button>
+    <button onclick="restartGame()">重新开始</button>
+    <button onclick="showHistory()">路径</button>
+  </div>
+</div>
+
+<!-- Save Modal -->
+<div class="modal-overlay" id="save-modal">
+  <div class="modal">
+    <h3>保存游戏</h3>
+    <input type="text" id="save-name" placeholder="存档名称（留空自动命名）">
+    <button class="primary" onclick="doSave()">保存</button>
+    <button onclick="closeModals()">取消</button>
+  </div>
+</div>
+
+<!-- Load Modal -->
+<div class="modal-overlay" id="load-modal">
+  <div class="modal">
+    <h3>读取存档</h3>
+    <ul class="save-list" id="save-list"></ul>
+    <button onclick="closeModals()" style="margin-top:12px;">取消</button>
+  </div>
+</div>
+
+<!-- History Modal -->
+<div class="modal-overlay" id="history-modal">
+  <div class="modal">
+    <h3>已走过的路径</h3>
+    <div id="history-content" style="max-height:50vh;overflow-y:auto;"></div>
+    <button onclick="closeModals()" style="margin-top:12px;">关闭</button>
+  </div>
+</div>
+
+<script src="story_data.js"></script>
+<script>
+// ─── Game Engine ──────────────────────────────
+
+const gameState = {
+  currentNodeId: 'start',
+  flags: {},
+  history: [],
+  choicesMade: []
+};
+
+let currentNode = null;
+
+function getNode(id) {
+  return STORY_DATA.nodes.find(n => n.id === id) || null;
+}
+
+function evaluateCondition(condition) {
+  if (!condition || Object.keys(condition).length === 0) return true;
+  for (const [key, expected] of Object.entries(condition)) {
+    const actual = gameState.flags[key];
+    if (actual === undefined) return false;
+    if (typeof expected === 'object' && expected !== null) {
+      if ('min' in expected && actual < expected.min) return false;
+      if ('max' in expected && actual > expected.max) return false;
+      if ('equals' in expected && actual !== expected.equals) return false;
+      continue;
+    }
+    if (actual !== expected) return false;
+  }
+  return true;
+}
+
+function applyEffects(effects) {
+  if (!effects) return;
+  for (const [key, value] of Object.entries(effects)) {
+    if (typeof value === 'object' && value !== null) {
+      if ('add' in value) gameState.flags[key] = (gameState.flags[key] || 0) + value.add;
+      else if ('subtract' in value) gameState.flags[key] = (gameState.flags[key] || 0) - value.subtract;
+      else if ('append' in value) gameState.flags[key] = value.append;
+      continue;
+    }
+    gameState.flags[key] = value;
+  }
+}
+
+function navigate(nextNodeId) {
+  gameState.history.push(gameState.currentNodeId);
+  gameState.currentNodeId = nextNodeId;
+  currentNode = getNode(nextNodeId);
+  if (!currentNode) {
+    document.getElementById('text-content').innerHTML = '<p style="color:#ef5350;">错误: 找不到节点 ' + nextNodeId + '</p>';
+    return;
+  }
+  applyEffects(currentNode.effects);
+  renderNode();
+}
+
+function makeChoice(index) {
+  const choices = getAvailableChoices();
+  if (index < 0 || index >= choices.length) return;
+  gameState.choicesMade.push({ nodeId: gameState.currentNodeId, choiceIndex: index });
+  navigate(choices[index].nextNode);
+}
+
+function getAvailableChoices() {
+  if (!currentNode || !currentNode.choices) return [];
+  return currentNode.choices.filter(c => evaluateCondition(c.condition));
+}
+
+// ─── Rendering ──────────────────────────────
+
+function renderNode() {
+  const header = document.getElementById('header');
+  const titleScreen = document.getElementById('title-screen');
+  const textArea = document.getElementById('text-area');
+  const textContent = document.getElementById('text-content');
+  const choicesContainer = document.getElementById('choices-container');
+  const endingScreen = document.getElementById('ending-screen');
+  const toolbar = document.getElementById('toolbar');
+
+  titleScreen.style.display = 'none';
+  endingScreen.style.display = 'none';
+
+  if (currentNode.isEnding) {
+    textArea.style.display = 'none';
+    choicesContainer.innerHTML = '';
+
+    const endingClass = 'ending-' + (currentNode.endingType || 'neutral');
+    const typeLabels = { good: '好结局', bad: '坏结局', neutral: '普通结局', true: '真结局', secret: '隐藏结局' };
+
+    endingScreen.style.display = 'block';
+    endingScreen.className = endingClass;
+    endingScreen.innerHTML = `
+      <div class="ending-title">${currentNode.endingTitle || '终幕'}</div>
+      <div class="ending-type-label">${typeLabels[currentNode.endingType] || currentNode.endingType}</div>
+      <div class="stats">经过 ${gameState.history.length} 个场景，做出 ${gameState.choicesMade.length} 次选择</div>
+      <p style="max-width:600px;margin:0 auto 20px;text-align:left;text-indent:2em;">${formatText(currentNode.text)}</p>
+      <button onclick="restartGame()">再玩一次</button>
+      <button onclick="showLoadModal()">读取存档</button>
+    `;
+    toolbar.style.display = 'flex';
+    header.style.display = 'none';
+    return;
+  }
+
+  textArea.style.display = 'block';
+  toolbar.style.display = 'flex';
+  header.style.display = 'flex';
+
+  document.getElementById('story-title').textContent = STORY_DATA.title;
+  document.getElementById('scene-name').textContent = currentNode.title ? ' · ' + currentNode.title : '';
+
+  const pov = document.getElementById('pov-indicator');
+  if (STORY_DATA.perspective_mode === 'multi' && currentNode.perspective) {
+    pov.textContent = '当前视角: ' + currentNode.perspective;
+    pov.style.display = 'inline';
+  } else {
+    pov.style.display = 'none';
+  }
+
+  textContent.innerHTML = formatText(currentNode.text);
+
+  const choices = getAvailableChoices();
+  choicesContainer.innerHTML = '';
+  choices.forEach((c, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.innerHTML = `<span class="choice-num">[${i + 1}]</span>${c.text}`;
+    btn.addEventListener('click', () => makeChoice(i));
+    choicesContainer.appendChild(btn);
+  });
+
+  if (choices.length === 0) {
+    choicesContainer.innerHTML = '<p style="color:#ef5350;">[错误] 当前节点没有可用选项。</p>';
+  }
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function formatText(text) {
+  return text.split('\n\n').map(p => p.trim() ? `<p>${p.trim()}</p>` : '').join('');
+}
+
+function showTitleScreen() {
+  document.getElementById('header').style.display = 'none';
+  document.getElementById('text-area').style.display = 'none';
+  document.getElementById('choices-container').innerHTML = '';
+  document.getElementById('ending-screen').style.display = 'none';
+  document.getElementById('toolbar').style.display = 'none';
+
+  const ts = document.getElementById('title-screen');
+  ts.style.display = 'flex';
+  ts.innerHTML = `
+    <h1>${STORY_DATA.title}</h1>
+    <div class="subtitle">星落降临，命运的分岔</div>
+    <div class="meta">${STORY_DATA.author} · ${STORY_DATA.version}</div>
+    ${STORY_DATA.perspective_mode === 'single' ? `<div class="meta" style="color:#81c784;">主人公: ${STORY_DATA.protagonist_oc || '未知'}</div>` : ''}
+    <button onclick="startGame()">开始游戏</button>
+    <button onclick="showLoadModal()">读取存档</button>
+  `;
+}
+
+function startGame() {
+  gameState.currentNodeId = 'start';
+  gameState.flags = {};
+  gameState.history = [];
+  gameState.choicesMade = [];
+  currentNode = getNode('start');
+  if (currentNode) {
+    renderNode();
+  }
+}
+
+function restartGame() {
+  if (confirm('确定要重新开始吗？当前进度将丢失。')) {
+    startGame();
+  }
+}
+
+// ─── Save / Load ──────────────────────────────
+
+const SAVE_PREFIX = 'is_save_';
+
+function saveGame() {
+  document.getElementById('save-name').value = '';
+  document.getElementById('save-modal').classList.add('active');
+  setTimeout(() => document.getElementById('save-name').focus(), 100);
+}
+
+function doSave() {
+  let name = document.getElementById('save-name').value.trim();
+  if (!name) name = 'auto_' + new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+
+  const data = {
+    currentNodeId: gameState.currentNodeId,
+    flags: gameState.flags,
+    history: gameState.history,
+    choicesMade: gameState.choicesMade,
+    savedAt: new Date().toLocaleString('zh-CN'),
+    sceneTitle: currentNode ? currentNode.title || currentNode.id : ''
+  };
+
+  localStorage.setItem(SAVE_PREFIX + name, JSON.stringify(data));
+  closeModals();
+}
+
+function showLoadModal() {
+  const list = document.getElementById('save-list');
+  list.innerHTML = '';
+
+  const saves = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key.startsWith(SAVE_PREFIX)) {
+      try {
+        const data = JSON.parse(localStorage.getItem(key));
+        saves.push({ name: key.replace(SAVE_PREFIX, ''), data });
+      } catch (e) {}
+    }
+  }
+  saves.sort((a, b) => (b.data.savedAt || '').localeCompare(a.data.savedAt || ''));
+
+  if (saves.length === 0) {
+    list.innerHTML = '<li style="color:#888;">没有找到存档</li>';
+  } else {
+    saves.forEach(s => {
+      const li = document.createElement('li');
+      li.innerHTML = `<div>
+        <strong>${s.name}</strong><br>
+        <small style="color:#888;">${s.data.savedAt} · ${s.data.sceneTitle}</small>
+      </div>`;
+      li.addEventListener('click', () => {
+        gameState.currentNodeId = s.data.currentNodeId;
+        gameState.flags = s.data.flags || {};
+        gameState.history = s.data.history || [];
+        gameState.choicesMade = s.data.choicesMade || [];
+        currentNode = getNode(gameState.currentNodeId);
+        closeModals();
+        if (currentNode) renderNode();
+      });
+      const delBtn = document.createElement('button');
+      delBtn.className = 'delete-btn';
+      delBtn.textContent = '删除';
+      delBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        localStorage.removeItem(SAVE_PREFIX + s.name);
+        showLoadModal();
+      });
+      li.appendChild(delBtn);
+      list.appendChild(li);
+    });
+  }
+
+  document.getElementById('load-modal').classList.add('active');
+}
+
+function showHistory() {
+  const content = document.getElementById('history-content');
+  let html = '';
+  gameState.history.forEach(id => {
+    html += '<span style="color:#666;"> → </span>' + id + '<br>';
+  });
+  html += '<span style="color:#4fc3f7;"> → ' + gameState.currentNodeId + ' ◁ 当前</span>';
+  content.innerHTML = html;
+  document.getElementById('history-modal').classList.add('active');
+}
+
+function closeModals() {
+  document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('active'));
+}
+
+// ─── Keyboard Shortcuts ──────────────────────
+
+document.addEventListener('keydown', (e) => {
+  if (document.querySelector('.modal-overlay.active')) return;
+
+  if (e.key >= '1' && e.key <= '9' && currentNode && !currentNode.isEnding) {
+    const choices = getAvailableChoices();
+    const idx = parseInt(e.key) - 1;
+    if (idx < choices.length) {
+      e.preventDefault();
+      makeChoice(idx);
+    }
+  }
+
+  if (e.key === 's' || e.key === 'S') {
+    if (!e.ctrlKey && !e.metaKey && currentNode && !currentNode.isEnding) {
+      e.preventDefault();
+      saveGame();
+    }
+  }
+
+  if (e.key === 'l' || e.key === 'L') {
+    if (!e.ctrlKey && !e.metaKey) {
+      e.preventDefault();
+      showLoadModal();
+    }
+  }
+});
+
+// Close modals on overlay click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeModals();
+  });
+});
+
+// ─── Init ────────────────────────────────────
+showTitleScreen();
+</script>
+</body>
+</html>
