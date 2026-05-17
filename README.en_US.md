@@ -1,4 +1,4 @@
-# Auto OC Interactive Story
+# Auto OC Interactive Story.skill
 
 > Full-pipeline interactive story generation skill: from character creation to playable games
 
