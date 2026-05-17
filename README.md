@@ -2,7 +2,7 @@
 
 > 从角色创建到可玩游戏的全流程互动故事生成技能
 
-[Switch to English](https://github.com/Okbackv/AutoOC-InteractiveStory-skill/blob/main/README.en-US.md)
+[Switch to English](https://github.com/Okbackv/AutoOC-InteractiveStory-skill/blob/main/README.en_US.md)
 
 ## 这是什么？
 
