@@ -1,4 +1,4 @@
-# Auto OC Interactive Story
+# 自动生成OC文字互动游戏.skill
 
 > 从角色创建到可玩游戏的全流程互动故事生成技能
 
