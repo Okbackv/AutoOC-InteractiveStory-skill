@@ -2,6 +2,8 @@
 
 > Full-pipeline interactive story generation skill: from character creation to playable games
 
+[切换到中文](https://github.com/Okbackv/AutoOC-InteractiveStory-skill/blob/main/README.md)
+
 ## What is this?
 
 A **skill** for Claude Code that guides you and the AI through co-creating:
